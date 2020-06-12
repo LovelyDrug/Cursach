@@ -8,14 +8,6 @@ header.set_title('Test');
 header.set_subtitle('Kursach');
 header.set_show_close_button(true);
 
-const win1 = new Gtk.Window();
-win1.window_position = Gtk.WindowPosition.CENTER;
-win1.connect('destroy', Gtk.main_quit);
-win1.set_default_size(750, 270);
-win1.set_titlebar(header);
-win1.border_width = 10;
-win1.show_all();
-
 const ListBoxRowWithData = Lang.Class({
     Name: "ListBoxRowWithData",
     Extends: Gtk.ListBoxRow,
@@ -27,12 +19,34 @@ const ListBoxRowWithData = Lang.Class({
     }
 });
 
+let app = new Gtk.Application({ application_id: 'org.gtk.advancedHello' });
+
+app.connect('activate', () => {
+log('App started');
+
+let mainWin = new Gtk.ApplicationWindow({ application: app });
+let container = new Gtk.Box({});
+
+let leftFrame = new Gtk.Frame({});
+let rightFrame = new Gtk.Frame({});
+
+container.add(leftFrame);
+container.add(rightFrame);
+
+leftFrame.set_size_request(500, 300);
+rightFrame.set_size_request(250, 300);
+
+mainWin.add(container);
+mainWin.show_all();
+});
+app.run([]);
+
 const ListBoxWindow = Lang.Class({
     Name: "ListBoxWindow",
     Extends: Gtk.Window,
 
     _init: function() {
-        this.parent({title: "ListBox Demo"});
+        this.parent({title: "Options"});
         this.border_width = 10;
 
         let box_outer = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL, spacing: 6});
@@ -82,7 +96,7 @@ const ListBoxWindow = Lang.Class({
         listbox.add(row);
 
         let listbox2 = new Gtk.ListBox();
-        let items = "Kyiv Kharkiv Lviv Donetsk".split(' ');
+        let items = "Kyiv, Kharkiv, Lviv, Donetsk, Odessa, Dnipro, Zaporizhia, Kryvyi Rih, Mykolaiv, Mariupol, Luhansk, Sevastopol, Vinnytsia, Makiivka, Simferopol, Kherson, Poltava".split(',');
 
         items.forEach(
             item => listbox2.add(new ListBoxRowWithData(item))
@@ -109,4 +123,3 @@ let win2 = new ListBoxWindow();
 win2.connect("destroy-event", Gtk.main_quit);
 win2.show_all();
 Gtk.main();
-
