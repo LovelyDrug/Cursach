@@ -1,4 +1,6 @@
-const Gtk = imports.gi.Gtk;
+'use strict';
+
+const { Gtk } = imports.gi;
 const Lang = imports.lang;
 
 Gtk.init(null);
@@ -8,18 +10,22 @@ header.set_title('Test');
 header.set_subtitle('Kursach');
 header.set_show_close_button(true);
 
-const win1 = new Gtk.Window();
-win1.window_position = Gtk.WindowPosition.CENTER;
-win1.connect('destroy', Gtk.main_quit);
-win1.set_default_size(750, 270);
-win1.set_titlebar(header);
-win1.border_width = 10;
-win1.show_all();
+const defaultLength = 750;
+const defaultHeight = 270;
+const borderWidth = 10;
+
+const emptyWindow = new Gtk.Window();
+emptyWindow.window_position = Gtk.WindowPosition.CENTER;
+emptyWindow.connect('destroy', Gtk.main_quit);
+emptyWindow.set_default_size(defaultLength, defaultHeight);
+emptyWindow.set_titlebar(header);
+emptyWindow.border_width = borderWidth;
+emptyWindow.show_all();
 
 const ListBoxRowWithData = Lang.Class({
-    Name: "ListBoxRowWithData",
+    Name: 'ListBoxRowWithData',
     Extends: Gtk.ListBoxRow,
-
+    
     _init: function(data) {
         this.parent();
         this.data = data;
@@ -27,98 +33,101 @@ const ListBoxRowWithData = Lang.Class({
     }
 });
 
-
-
 const ListBoxWindow = Lang.Class({
-    Name: "ListBoxWindow",
+    Name: 'ListBoxWindow',
     Extends: Gtk.Window,
 
     _init: function() {
-        this.parent({title: "Options"});
-        this.border_width = 10;
+        this.parent({title: 'Options'});
+        this.border_width = borderWidth;
 
-        let box_outer = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL, spacing: 6});
+        const defaultSpacing = 50;
+        const defaultXalign = 0;
+        const box_outerSpacing = 6;
+
+        let box_outer = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL, spacing: box_outerSpacing});
         this.add(box_outer);
 
         let listbox = new Gtk.ListBox();
         listbox.selection_mode = Gtk.SelectionMode.NONE;
-        box_outer.pack_start(listbox, true, true, 0);
+        box_outer.pack_start(listbox);
 
-        let row = new Gtk.ListBoxRow();
-        let hbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 50});
-        row.add(hbox);
-        let vbox = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
-        hbox.pack_start(vbox, true, true, 0);
+        let rowDate = new Gtk.ListBoxRow();
+        let hboxDate = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: defaultSpacing});
+        rowDate.add(hboxDate);
+        let vboxDate = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
+        hboxDate.pack_start(vboxDate);
 
-        let label1 = new Gtk.Label({label: "Automatic Date & Time", xalign: 0});
-        let label2 = new Gtk.Label({label: "Requires internet access", xalign: 0});
-        vbox.pack_start(label1, true, true, 0);
-        vbox.pack_start(label2, true, true, 0);
+        let labelDate = new Gtk.Label({label: 'Automatic Date & Time', xalign: defaultXalign});
+        let labelInternet = new Gtk.Label({label: 'Requires internet access', xalign: defaultXalign});
+        vboxDate.pack_start(labelDate);
+        vboxDate.pack_start(labelInternet);
 
-        let swtch = new Gtk.Switch();
-        swtch.valign = Gtk.Align.CENTER;
-        hbox.pack_start(swtch, false, true, 0);
+        let swtchDate = new Gtk.Switch();
+        swtchDate.valign = Gtk.Align.CENTER;
+        hbox.pack_start(swtchDate);
 
-        listbox.add(row);
+        listbox.add(rowUpdate);
 
-        row = new Gtk.ListBoxRow();
-        hbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 50});
-        row.add(hbox);
-        let label = new Gtk.Label({label: "Enable Automatic Update", xalign: 0});
-        let check = new Gtk.CheckButton();
-        hbox.pack_start(label, true, true, 0);
-        hbox.pack_start(check, false, true, 0);
+        rowUpdate = new Gtk.ListBoxRow();
+        hboxUpdate = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: defaultSpacing});
+        rowUpdate.add(hboxUpdate);
+        let labelUpdate = new Gtk.Label({label: 'Enable Automatic Update', xalign: defaultXalign});
+        let checkUpdate = new Gtk.CheckButton();
+        hboxUpdate.pack_start(labelUpdate);
+        hboxUpdate.pack_start(checkUpdate);
 
-        listbox.add(row);
+        listbox.add(rowFormat);
 
-        row = new Gtk.ListBoxRow();
-        hbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 50});
-        row.add(hbox);
-        label = new Gtk.Label({label: "Date Format", xalign: 0});
+        rowFormat = new Gtk.ListBoxRow();
+        hboxFormat = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: defaultSpacing});
+        rowFormat.add(hboxFormat);
+        labelFormat = new Gtk.Label({label: 'Date Format', xalign: defaultXalign});
 
-        let combo = new Gtk.ComboBoxText();
-        combo.insert(0, "0", "24-hour");
-        combo.insert(1, "1", "AM/PM");
-        hbox.pack_start(label, true, true, 0);
-        hbox.pack_start(combo, false, true, 0);
+        let comboFormat = new Gtk.ComboBoxText();
+        comboFormat.insert(0, '0', '24-hour');
+        comboFormat.insert(1, '1', 'AM/PM');
+        hboxFormat.pack_start(labelFormat);
+        hboxFormat.pack_start(comboFormat);
 
-       
-
-        let listbox2 = new Gtk.ListBox();
-        let items = ['Kyiv', 'Kharkiv', 'Lviv', 'Donetsk', 'Odessa', 'Dnipro', 'Zaporizhia', 'Mykolaiv', 'Mariupol', 'Luhansk', 'Sevastopol', 'Vinnytsia', 'Makiivka', 'Simferopol', 'Kherson', 'Poltava'];
-        let combo2 = new Gtk.ComboBoxText();
-
-         listbox.add(row);
+        let cities = [
+            'Kyiv', 'Kharkiv', 'Lviv', 'Donetsk', 'Odessa', 'Dnipro', 'Zaporizhia',
+            'Mykolaiv', 'Mariupol', 'Luhansk', 'Sevastopol', 'Vinnytsia', 'Makiivka', 
+            'Simferopol', 'Kherson', 'Poltava'
+        ];
         
-        row = new Gtk.ListBoxRow();
-        hbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 50});
-        row.add(hbox);
-        label = new Gtk.Label({label: "City", xalign: 0});
+        listbox.add(rowCity);
         
-        items.forEach((item, index, array) => {
-            combo2.insert(index, " ${index} ", item);
-            hbox.pack_start(label, true, true, 0);
-            hbox.pack_start(combo2, false, true, 0);
+        let comboCity = new Gtk.ComboBoxText();
+        rowCity = new Gtk.ListBoxRow();
+        hboxCity = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: defaultSpacing});
+        rowCity.add(hboxCity);
+        labelCity = new Gtk.Label({label: 'City', xalign: defaultXalign});
+        
+        cities.forEach((city, index) => {
+            comboCity.insert(index, ' ${index} ', city);
+            hboxCity.pack_start(labelCity);
+            hboxCity.pack_start(comboCity);
         });
 
-        let sortFunc = function(row1, row2, data, notifyDestroy) {
+        let sortFunc = function(row1, row2) {
             return row1.data.toLowerCase() > row2.data.toLowerCase();
         };
 
-        let filterFunc = function(row, data, notifyDestroy) {
+        let filterFunc = function(row) {
             return (row.data != 'Fail');
         };
 
         listbox2.set_sort_func(sortFunc);
         listbox2.set_filter_func(filterFunc);
         
-        listbox2.connect("row-activated", (widget, row) => print(row.data));
+        listbox2.connect('row-activated', row => print(row.data));
 
-        box_outer.pack_start(listbox2, true, true, 0);
+        box_outer.pack_start(listbox2);
         listbox2.show_all();
     }
 });
-let win2 = new ListBoxWindow();
-win2.connect("destroy-event", Gtk.main_quit);
-win2.show_all();
+let OptionsWindow = new ListBoxWindow();
+OptionsWindow.connect('destroy-event', Gtk.main_quit);
+OptionsWindow.show_all();
 Gtk.main();
