@@ -1,0 +1,28 @@
+{
+  "name": "noname",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Put description here",
+  "author": "Yoyr Name <your@email.com>",
+  "license": "MIT",
+  "main": "Kursach.js",
+  "scripts": {
+    "test": "npm run -s lint",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LovelyDrug/Cursach.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LovelyDrug/Cursach/issues"
+  },
+  "homepage": "https://github.com/LovelyDrug/Cursach",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "eslint": "^7.2.0"
+  }
+}
